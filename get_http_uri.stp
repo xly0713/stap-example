@@ -1,0 +1,11 @@
+#!/usr/bin/env stap
+
+/*
+ *  功能：打印成员变量
+ */
+
+probe process("/opt/nginx/sbin/nginx").function("ngx_http_process_request").call
+{
+    //printf("r->uri.len: %d, r->uri.data: %p\n", $r->uri->len, $r->uri->data)
+    printf("r->uri: %s\nr->uri(n): %s\n", user_string($r->uri->data), user_string_n($r->uri->data, $r->uri->len))
+}

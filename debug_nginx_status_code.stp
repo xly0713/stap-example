@@ -1,0 +1,13 @@
+#!/usr/bin/env stap
+
+/*
+ * 功能：打印用户态调用堆栈
+ */
+
+probe process("/opt/nginx/sbin/nginx").function("ngx_http_finalize_request").call,
+      process("/opt/nginx/sbin/nginx").function("ngx_http_special_response_handler").call
+{
+    rc = int_arg(2)   //获取函数参数
+    printf("rc: %d\n", rc)
+    print_ubacktrace()
+}

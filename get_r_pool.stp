@@ -1,0 +1,9 @@
+#!/usr/bin/env stap
+
+/*
+ * 功能: $($)打印变量
+ */
+
+probe process("/opt/nginx/sbin/nginx").function("ngx_http_process_request").call {
+    printf("$r->pool$: %s\n$r->pool$$: %s\n", $r->pool$, $r->pool$$)
+}

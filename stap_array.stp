@@ -1,0 +1,22 @@
+#!/usr/bin/env stap
+
+/*
+ * 功能: 演示关联数组用法，数组的索引支持多达9项索引域(索引域之间以,号隔开)
+ * */
+
+global reads
+
+probe vfs.read
+{
+    reads[execname(), pid()] ++
+}
+
+probe timer.s(3)
+{
+    foreach ([execname, pid+] in reads) {  //pid后面的+号: 表示升序排序
+        printf("%s(%d) : %d \n", execname, pid, reads[execname, pid])
+    }
+
+    printf("================================\n")
+    delete reads
+}

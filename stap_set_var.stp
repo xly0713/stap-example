@@ -1,0 +1,12 @@
+#!/usr/bin/env stap
+
+/*
+ * 功能：guru模式修改进程中的变量
+ * 用法：stap -g stap_set_var.stp -c ./stap_set_var
+ */
+
+probe process("./stap_set_var").statement("main@./stap_set_var.c:18")
+{
+    $p->id = 222;
+    printf("$p$: %s\n", $p$)
+}

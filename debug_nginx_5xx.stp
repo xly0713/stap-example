@@ -1,0 +1,26 @@
+#!/usr/bin/env stap
+
+/*
+ * 功能: 特定域名堆栈打印
+ */
+
+probe process("/opt/nginx/sbin/nginx").function("ngx_http_finalize_request").call
+{
+    rc = int_arg(2)
+    if (rc < 0) {
+        host = "(null)"
+        if ($r->headers_in->server->len != 0) {
+            host = user_string_n($r->headers_in->server->data, $r->headers_in->server->len)
+        } else {
+            cscf = &@cast($r->srv_conf, "ngx_http_core_srv_conf_t")[@var("ngx_http_core_module@src/http/ngx_http_core_module.c")->ctx_index]
+            if (cscf->server_name->len != 0) {
+                host = user_string_n(cscf->server_name->data, cscf->server_name->len)
+            }
+        }
+
+        if (host =~ ".*\.test\.com") {
+            printf("rc: %d, host: %s\n", rc, host)
+            print_ubacktrace()
+        }
+    }
+}

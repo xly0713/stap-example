@@ -1,0 +1,10 @@
+#!/usr/bin/env stap
+
+/*
+ * 功能：显示ngx_http_handler函数哪些行被执行
+ */
+
+probe process("/opt/nginx/sbin/nginx").statement("ngx_http_handler@src/http/ngx_http_core_module.c:*")
+{
+    printf("%s\n", pp()) //pp(): 输出当前被激活的探测点
+}

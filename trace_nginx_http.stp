@@ -1,0 +1,15 @@
+#!/usr/bin/env stap
+
+/*
+ * 功能：打印调用堆栈
+ */
+
+probe process("/opt/nginx/sbin/nginx").function("*@src/http/ngx_http_*").call
+{
+    printf("%s -> %s\n", thread_indent(4), ppfunc());
+}
+
+probe process("/opt/nginx/sbin/nginx").function("*@src/http/ngx_http_*").return
+{
+    printf("%s <- %s\n", thread_indent(-4), ppfunc());
+}

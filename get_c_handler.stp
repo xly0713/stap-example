@@ -1,0 +1,11 @@
+#!/usr/bin/env stap
+
+/*
+ * 功能：打印函数指针实际指向
+ */
+
+probe process("/opt/nginx/sbin/nginx").function("ngx_http_process_request_line").call
+{
+    c = &@cast($rev->data, "ngx_connection_t")
+    printf("c->read->heanlers: %s, c->write->handler: %s\n", usymname(c->read->handler), usymname(c->write->handler))
+}

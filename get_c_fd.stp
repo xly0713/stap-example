@@ -1,0 +1,10 @@
+#!/usr/bin/env stap
+
+/*
+ * 功能：cast转换数据类型,比如将void *指针转换为实际的类型
+ */
+
+probe process("/opt/nginx/sbin/nginx").function("ngx_http_process_request_line").call
+{
+    printf("c->fd: %d\n", @cast($rev->data, "ngx_connection_t")->fd)
+}

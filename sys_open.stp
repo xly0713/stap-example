@@ -1,0 +1,10 @@
+#!/usr/bin/env stap
+
+/*
+ *  功能：变量获取，类型转换
+ */
+
+probe kernel.function("sys_open").call {
+    //printf("filename: %p(%s), flags: %d, mode: %x\n", pointer_arg(1), kernel_string(pointer_arg(1)), int_arg(2), int_arg(3))
+    printf("filename: %s\n", user_string_quoted(pointer_arg(1)));
+}
