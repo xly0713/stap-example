@@ -1,1 +1,1 @@
-systemstap script examples.
+systemtap script examples.
